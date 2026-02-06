@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026年春节门店休假安排表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Microsoft YaHei", "SimHei", sans-serif;
+            background: linear-gradient(135deg, #ff3333 0%, #cc0000 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            padding: 30px;
+            background: linear-gradient(145deg, #ff4d4d 0%, #ff3333 100%);
+            border: 12px solid #ffd700;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+        
+        .header-decoration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path fill="%23ffd700" d="M0,60 C200,0 400,120 600,60 C800,0 1000,120 1200,60 L1200,0 L0,0 Z"/></svg>') no-repeat;
+            background-size: cover;
+        }
+        
+        /* 灯笼装饰 */
+        .lantern {
+            position: absolute;
+            width: 50px;
+            height: 70px;
+            background: #ff3333;
+            border-radius: 25px;
+            top: -15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        
+        .lantern:before {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 12px;
+            background: #ffd700;
+            top: -8px;
+            left: 12px;
+            border-radius: 8px;
+        }
+        
+        .lantern:after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 20px;
+            background: #ffd700;
+            bottom: -20px;
+            left: 19px;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .lantern.left {
+            left: 50px;
+        }
+        
+        .lantern.right {
+            right: 50px;
+        }
+        
+        /* 标题样式 */
+        .title {
+            text-align: center;
+            margin: 30px 0 40px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .title h1 {
+            color: #ffd700;
+            font-size: 42px;
+            text-shadow: 4px 4px 0 #b22222;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .title h1:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 10%;
+            width: 80%;
+            height: 6px;
+            background: #ffd700;
+            border-radius: 3px;
+        }
+        
+        .title .subtitle {
+            color: #fff;
+            font-size: 20px;
+            text-shadow: 3px 3px 0 #b22222;
+            margin-top: 25px;
+        }
+        
+        /* 表格容器 */
+        .table-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 2;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .holiday-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .holiday-table th {
+            background: linear-gradient(135deg, #ffd700 0%, #ff9900 100%);
+            color: #b22222;
+            padding: 20px 15px;
+            font-size: 20px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 4px solid #ff3333;
+            position: sticky;
+            top: 0;
+        }
+        
+        .holiday-table td {
+            padding: 18px 15px;
+            text-align: center;
+            border-bottom: 2px solid #ffd700;
+            color: #333;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .holiday-table tr:nth-child(even) {
+            background: rgba(255, 216, 0, 0.1);
+        }
+        
+        .holiday-table tr:hover {
+            background: rgba(255, 50, 50, 0.1);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+        
+        /* 特定列样式 */
+        .province {
+            font-weight: bold;
+            color: #b22222;
+            font-size: 18px;
+        }
+        
+        .store-name {
+            font-weight: bold;
+            color: #ff3333;
+            font-size: 18px;
+        }
+        
+        .holiday-days {
+            font-weight: bold;
+            color: #ff3333;
+            font-size: 20px;
+            background: rgba(255, 215, 0, 0.2);
+            padding: 8px 15px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        
+        .work-date {
+            color: #2c3e50;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ffd700 0%, #ff9900 100%);
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
+        }
+        
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            color: #ffd700;
+            font-size: 16px;
+            margin-top: 30px;
+            text-shadow: 2px 2px 0 #b22222;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* 烟花动画 */
+        @keyframes fireworks {
+            0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100px) scale(0) rotate(180deg); opacity: 0; }
+        }
+        
+        .firework {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ffd700;
+            border-radius: 50%;
+            animation: fireworks 2s ease-out infinite;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                border-width: 6px;
+            }
+            
+            .title h1 {
+                font-size: 28px;
+            }
+            
+            .title .subtitle {
+                font-size: 16px;
+            }
+            
+            .holiday-table th,
+            .holiday-table td {
+                padding: 12px 8px;
+                font-size: 14px;
+            }
+            
+            .table-container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部装饰 -->
+        <div class="header-decoration"></div>
+        <div class="lantern left"></div>
+        <div class="lantern right"></div>
+        
+        <!-- 标题 -->
+        <div class="title">
+            <h1>🎉 2026年春节门店休假安排表 🎉</h1>
+            <div class="subtitle">新春佳节，恭祝全体员工节日快乐，阖家幸福！</div>
+        </div>
+        
+        <!-- 表格内容 -->
+        <div class="table-container">
+            <table class="holiday-table">
+                <thead>
+                    <tr>
+                        <th>省份</th>
+                        <th>门店</th>
+                        <th>春节休假日期</th>
+                        <th>休假天数</th>
+                        <th>上班日期</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="province">北京</td>
+                        <td class="store-name">北京东方602</td>
+                        <td>2月16日(农历十二月二十九除夕):9:00-16:00<br>2月17日(初一):10:00-16:00<br>2月18日、19日(初二至初三):10:00-18:00<br>2月20日起(初四)正常班</td>
+                        <td><span class="holiday-days">0天</span></td>
+                        <td><span class="work-date">2月20日正常上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">上海</td>
+                        <td class="store-name">上海港汇3705</td>
+                        <td>2月16日(农历腊月二十九):9:00-16:00<br>2月17日(初一):10:00-16:00<br>2月18日至2月22日(初二至初六):9:30-18:00<br>2月23日起(初七正常班)</td>
+                        <td><span class="holiday-days">0天</span></td>
+                        <td><span class="work-date">2月23日正常班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">南京</td>
+                        <td class="store-name">南京中心</td>
+                        <td>2月15日(腊月28) - 2月22日(正月初六)</td>
+                        <td><span class="holiday-days">8天</span></td>
+                        <td><span class="work-date">2月23日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">北京</td>
+                        <td class="store-name">北京华熙</td>
+                        <td>2月14日(腊月27) - 2月23日(正月初七)</td>
+                        <td><span class="holiday-days">10天</span></td>
+                        <td><span class="work-date">2月24日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">天津</td>
+                        <td class="store-name">天津金融</td>
+                        <td>2月15日(腊月28) - 2月23日(正月初七)</td>
+                        <td><span class="holiday-days">9天</span></td>
+                        <td><span class="work-date">2月24日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">河南</td>
+                        <td class="store-name">郑州华润</td>
+                        <td>2月14日(腊月27) - 2月22日(正月初六)</td>
+                        <td><span class="holiday-days">9天</span></td>
+                        <td><span class="work-date">2月23日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">湖南</td>
+                        <td class="store-name">长沙世茂</td>
+                        <td>2月14日(腊月27) - 2月23日(正月初七)</td>
+                        <td><span class="holiday-days">10天</span></td>
+                        <td><span class="work-date">2月24日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">四川</td>
+                        <td class="store-name">成都东原</td>
+                        <td>2月14日(腊月27) - 2月26日(正月初十)</td>
+                        <td><span class="holiday-days">13天</span></td>
+                        <td><span class="work-date">2月27日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">山东</td>
+                        <td class="store-name">济南华润</td>
+                        <td>2月11日(腊月24) - 2月25日(正月初九)</td>
+                        <td><span class="holiday-days">15天</span></td>
+                        <td><span class="work-date">2月26日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">南昌</td>
+                        <td class="store-name">南昌绿地</td>
+                        <td>2月12日(腊月25) - 2月28日(正月初十二)</td>
+                        <td><span class="holiday-days">17天</span></td>
+                        <td><span class="work-date">3月1日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">重庆</td>
+                        <td class="store-name">重庆融恒</td>
+                        <td>2月13日(腊月26) - 2月23日(正月初七)</td>
+                        <td><span class="holiday-days">11天</span></td>
+                        <td><span class="work-date">2月24日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">浙江</td>
+                        <td class="store-name">杭州华润2店</td>
+                        <td>2月14日(腊月27) - 2月21日(正月初五)</td>
+                        <td><span class="holiday-days">8天</span></td>
+                        <td><span class="work-date">2月22日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">浙江</td>
+                        <td class="store-name">宁波来福士</td>
+                        <td>2月13日(腊月26) - 2月25日(正月初九)</td>
+                        <td><span class="holiday-days">13天</span></td>
+                        <td><span class="work-date">2月26日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">浙江</td>
+                        <td class="store-name">绍兴世贸</td>
+                        <td>2月12日(腊月25) - 2月25日(正月初九)</td>
+                        <td><span class="holiday-days">14天</span></td>
+                        <td><span class="work-date">2月26日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">浙江</td>
+                        <td class="store-name">嘉兴世贸</td>
+                        <td>2月13日(腊月26) - 2月25日(正月初九)</td>
+                        <td><span class="holiday-days">11天</span></td>
+                        <td><span class="work-date">2月26日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">浙江</td>
+                        <td class="store-name">金华万达</td>
+                        <td>2月14日(腊月27) - 2月23日(正月初七)</td>
+                        <td><span class="holiday-days">10天</span></td>
+                        <td><span class="work-date">2月24日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">广东</td>
+                        <td class="store-name">广州世贸</td>
+                        <td>2月15日(腊月28) - 2月23日(正月初七)</td>
+                        <td><span class="holiday-days">9天</span></td>
+                        <td><span class="work-date">2月24日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">广东</td>
+                        <td class="store-name">广州万菱汇</td>
+                        <td>2月15日(腊月28) - 2月21日(正月初五)</td>
+                        <td><span class="holiday-days">7天</span></td>
+                        <td><span class="work-date">2月22日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">广东</td>
+                        <td class="store-name">深圳华润</td>
+                        <td>2月15日(腊月28) - 2月21日(正月初五)</td>
+                        <td><span class="holiday-days">7天</span></td>
+                        <td><span class="work-date">2月22日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">上海</td>
+                        <td class="store-name">上海宏伊</td>
+                        <td>2月15日(腊月28) - 2月21日(正月初五)</td>
+                        <td><span class="holiday-days">7天</span></td>
+                        <td><span class="work-date">2月22日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">江苏</td>
+                        <td class="store-name">徐州金融</td>
+                        <td>2月09日(腊月22) - 2月25日(正月初九)</td>
+                        <td><span class="holiday-days">17天</span></td>
+                        <td><span class="work-date">2月26日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">江苏</td>
+                        <td class="store-name">常州传媒</td>
+                        <td>2月15日(腊月28) - 2月21日(正月初五)</td>
+                        <td><span class="holiday-days">7天</span></td>
+                        <td><span class="work-date">2月22日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">江苏</td>
+                        <td class="store-name">盐城金融</td>
+                        <td>2月14日(腊月27) - 2月23日(正月初七)</td>
+                        <td><span class="holiday-days">10天</span></td>
+                        <td><span class="work-date">2月24日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">江苏</td>
+                        <td class="store-name">泰州置地</td>
+                        <td>2月10日(腊月23) - 2月23日(正月初七)</td>
+                        <td><span class="holiday-days">14天</span></td>
+                        <td><span class="work-date">2月24日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">江苏</td>
+                        <td class="store-name">扬州星耀</td>
+                        <td>2月13日(腊月26) - 2月24日(正月初八)</td>
+                        <td><span class="holiday-days">12天</span></td>
+                        <td><span class="work-date">2月25日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">福建</td>
+                        <td class="store-name">福州泰禾</td>
+                        <td>2月14日(腊月27) - 2月23日(正月初七)</td>
+                        <td><span class="holiday-days">10天</span></td>
+                        <td><span class="work-date">2月24日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">福建</td>
+                        <td class="store-name">厦门华润2店</td>
+                        <td>2月14日(腊月27) - 2月23日(正月初七)</td>
+                        <td><span class="holiday-days">10天</span></td>
+                        <td><span class="work-date">2月24日上班</span></td>
+                    </tr>
+                    <tr>
+                        <td class="province">山西</td>
+                        <td class="store-name">大南门</td>
+                        <td>2月17日(正月初一)</td>
+                        <td><span class="holiday-days">1天</span></td>
+                        <td><span class="work-date">2月18日上班</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 底部说明 -->
+        <div class="footer">
+            <p>※ 以上安排如有调整，以各门店实际通知为准</p>
+            <p>🎊 恭祝大家新春快乐，龙年大吉，万事如意！ 🎊</p>
+        </div>
+        
+        <!-- 烟花效果 -->
+        <div class="firework" style="left: 5%; animation-delay: 0s;"></div>
+        <div class="firework" style="left: 20%; animation-delay: 0.3s;"></div>
+        <div class="firework" style="left: 40%; animation-delay: 0.6s;"></div>
+        <div class="firework" style="left: 60%; animation-delay: 0.9s;"></div>
+        <div class="firework" style="left: 80%; animation-delay: 1.2s;"></div>
+        <div class="firework" style="left: 95%; animation-delay: 1.5s;"></div>
+    </div>
+</body>
+</html>
